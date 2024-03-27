@@ -7,9 +7,9 @@ I prodotti saranno oltre al cibo, anche giochi, cucce, etc.
 Stampiamo delle card contenenti i dettagli dei prodotti, come immagine, titolo, prezzo, icona della categoria ed il tipo di articolo che si sta visualizzando (prodotto, cibo, gioco, cuccia). 
  */
 
-class Food { // construzione dell method Product
+class Food{ // construzione dell method Product
 
-    public function __construct(public int $id, public string $title, public array $category, public string $type, public string $img, public float $price) {
+    public function __construct(public int $id, public string $title, public Category $category, public string $type, public string $img, public float $price) {
         $this->id = $id;
         $this->title = $title;
         $this->category = $category; // CAT OR DOG AND ICONS
@@ -19,9 +19,9 @@ class Food { // construzione dell method Product
     }
 };
 
-class Toy { // construzione dell method Product
+class Toy{ // construzione dell method Product
 
-    public function __construct(public int $id, public string $title, public array $category, public string $type, public string $img, public float $price) {
+    public function __construct(public int $id, public string $title, public Category $category, public string $type, public string $img, public float $price) {
         $this->id = $id;
         $this->title = $title;
         $this->category = $category; // CAT OR DOG AND ICONS
@@ -33,7 +33,7 @@ class Toy { // construzione dell method Product
 
 class House { // construzione dell method Product
 
-    public function __construct(public int $id, public string $title, public array $category, public string $type, public string $img, public float $price) {
+    public function __construct(public int $id, public string $title, public Category $category, public string $type, public string $img, public float $price) {
         $this->id = $id;
         $this->title = $title;
         $this->category = $category; // CAT OR DOG AND ICONS
@@ -44,32 +44,34 @@ class House { // construzione dell method Product
 };
 
 class Category {
-    public function __construct(public string $name, public string $icon) {
-        $this->name = $name;
-        $this->icon = $icon;
+    public function __construct(public string $icons) {
+        $this->icons = $icons;
+        //$this->icon = $icon;
     }
 };
 
-$cats = new Category('Cats', 'fa-solid fa-cat');
-$dogs = new Category('Dogs', 'fa-solid fa-dog');
+$cats = new Category('fa-solid fa-cat');
+$dogs = new Category('fa-solid fa-dog');
     
 $category = [$cats, $dogs];
 
 $foods = [
-    new Food( 1, 'Crocchette di Manzo', $category, 'Cibo', 'https://picsum.photos/200/300', 12.85),
-    new Food( 2, 'Crocchete di Pesce', $category, 'Cibo', 'https://picsum.photos/200/300', 5.60) 
+    new Food( 1, 'Crocchette di Manzo', $category[0], 'Cibo', 'https://picsum.photos/200/300', 12.85),
+    new Food( 2, 'Crocchete di Pesce', $category[1], 'Cibo', 'https://picsum.photos/200/300', 5.60) 
 ];
 
+//var_dump($foods);
+
 $houses = [
-    new House( 1, 'Cuccia Amaca per Calorifero', $category, 'Cucce', 'https://picsum.photos/200/300', 14.60),
-    new House( 2, 'Amaca da fissare al muro', $category, 'Cucce', 'https://picsum.photos/200/300', 32.10),
-    new House( 3, 'Cuccia Esterna Eco Lodge', $category, 'Cucce', 'https://picsum.photos/200/300', 75.60)
+    new House( 1, 'Cuccia Amaca per Calorifero', $category[0], 'Cucce', 'https://picsum.photos/200/300', 14.60),
+    new House( 2, 'Amaca da fissare al muro', $category[0], 'Cucce', 'https://picsum.photos/200/300', 32.10),
+    new House( 3, 'Cuccia Esterna Eco Lodge', $category[1], 'Cucce', 'https://picsum.photos/200/300', 75.60)
     ];
 
 $toys = [
-    new Toy( 1, 'Gioco Palla Con Piume', $category, 'Giochi', 'https://picsum.photos/200/300', 12.60),
-    new Toy( 2, 'Bacchetta con Uccellini', $category, 'Giochi', 'https://picsum.photos/200/300', 5.60),
-    new Toy( 2, 'Laser Bacchetta', $category, 'Giochi', 'https://picsum.photos/200/300', 9.60),
+    new Toy( 1, 'Gioco Palla Con Piume', $category[0], 'Giochi', 'https://picsum.photos/200/300', 12.60),
+    new Toy( 2, 'Bacchetta con Uccellini', $category[0], 'Giochi', 'https://picsum.photos/200/300', 5.60),
+    new Toy( 3, 'Laser Bacchetta', $category[0], 'Giochi', 'https://picsum.photos/200/300', 9.60),
 ];
     
 //var_dump($products);
@@ -93,9 +95,9 @@ $products = [
     </head>
 
     <body>
-        <header class="bg-succes text-white p-2">
+        <header class="bg-primary text-white p-2">
             <div class="container w-75">
-                <h1>Arca Planet</h1>
+                <h1>ARCAPLANET</h1>
             </div>
             
         </header>
@@ -103,19 +105,23 @@ $products = [
             <section>
                 <div class="container w-75">
                     <div class="row g-3 mt-2">
-                        <div class="card w-50 m-3">                                     
-                            <div class="card-body">
-                                <?php foreach($products as $product) : ?>
-                                    <?php foreach($product as $one_prod) : ?>
-                                        <img src="<?= $one_prod->img; ?>" alt="imagine di <?= $one_prod->title; ?>"></img>
+                        <?php foreach($products as $product) : ?>
+                            <?php foreach($product as $one_prod) : ?>
+                                <div class="card w-25 m-3">                                     
+                                    <div class="card-body">
+                                
+                                        <img class="w-100" src="<?= $one_prod->img; ?>" alt="imagine di <?= $one_prod->title; ?>"></img>
                                         <h3><?= $one_prod->title; ?></h3>
                                         <div>euro <?= $one_prod->price; ?></div>
-                                        <div><i class="<?= $one_prod->category; ?>"></i></div>
+                                        <div>
+                                            <i class="<?= $one_prod->category->icons; ?>"></i>
+                                        </div>
                                         <div>Tipo di prodotto: <?= $one_prod->type; ?></div>                                    
-                                    <?php endforeach; ?>
-                                <?php endforeach; ?>
-                            </div>                                   
-                        </div>
+                                    
+                                    </div>                                   
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
                     </div>                   
                 </div>
             </section>
